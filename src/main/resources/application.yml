@@ -1,0 +1,15 @@
+spring:
+  application.name: doping-technology-case
+
+  # h2 db
+  h2:
+    console.enabled: true
+
+  # datasource
+  datasource.url: jdbc:h2:mem:test
+
+  # jpa
+  jpa:
+    generate-ddl: true
+    hibernate.ddl-auto: create
+    show-sql: true
