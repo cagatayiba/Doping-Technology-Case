@@ -26,14 +26,14 @@ public class BaseEntity {
     @CreatedDate
     private Instant createdAt;
 
-    @CreatedBy
-    private String createdBy;
+    /*@CreatedBy
+    private String createdBy;*/
 
     @LastModifiedDate
     private Instant modifiedAt;
 
-    @LastModifiedBy
-    private String modifiedBy;
+    /*@LastModifiedBy
+    private String modifiedBy;*/
 
     @Version
     private Integer version;

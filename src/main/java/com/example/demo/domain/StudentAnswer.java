@@ -3,6 +3,8 @@ package com.example.demo.domain;
 import com.example.demo.domain.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,11 +21,10 @@ import lombok.Setter;
 public class StudentAnswer extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_student_answer_student"))
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_student_answer_answer_option"))
     private AnswerOption answerOption;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Test test;
 }

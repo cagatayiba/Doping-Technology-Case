@@ -4,6 +4,10 @@ import com.example.demo.domain.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,15 +21,22 @@ import lombok.Setter;
 @Table(name = "student")
 public class Student extends BaseEntity {
 
-    @Column(name = "student_number", nullable = false)
-    private String studentNumber;
+    @NotNull
+    // assuming student numbers have 9 digits
+    @Min(100_000_000)
+    @Max(999_999_999)
+    @Column(name = "student_number")
+    private Long studentNumber;
 
-    @Column(name = "name", nullable = false)
+    @NotNull
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "surname", nullable = false)
+    @NotNull
+    @Column(name = "surname")
     private String surname;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @NotNull
+    @Column(name = "email", unique = true)
     private String email;
 }
