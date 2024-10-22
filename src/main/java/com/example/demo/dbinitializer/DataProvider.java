@@ -1,21 +1,21 @@
 package com.example.demo.dbinitializer;
 
-import com.example.demo.domain.AnswerOption;
-import com.example.demo.domain.Question;
-import com.example.demo.domain.Student;
-import com.example.demo.domain.StudentAnswer;
-import com.example.demo.domain.StudentTestProgress;
-import com.example.demo.domain.Test;
-import com.example.demo.domain.TestProgressState;
+import com.example.demo.domain.model.AnswerOption;
+import com.example.demo.domain.model.Question;
+import com.example.demo.domain.model.Student;
+import com.example.demo.domain.model.StudentAnswer;
+import com.example.demo.domain.model.StudentTest;
+import com.example.demo.domain.model.Test;
+import com.example.demo.domain.model.TestProgressState;
+import com.example.demo.domain.model.TestState;
 import com.example.demo.repository.StudentAnswerRepository;
 import com.example.demo.repository.StudentRepository;
-import com.example.demo.repository.StudentTestProgressRepository;
+import com.example.demo.repository.StudentTestRepository;
 import com.example.demo.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class DataProvider implements CommandLineRunner {
     private final TestRepository testRepository;
     private final StudentRepository studentRepository;
     private final StudentAnswerRepository studentAnswerRepository;
-    private final StudentTestProgressRepository studentTestProgressRepository;
+    private final StudentTestRepository studentTestRepository;
 
 
     @Override
@@ -67,9 +67,9 @@ public class DataProvider implements CommandLineRunner {
                         .get()
                 ) // answers first question correct (second test)
         ));
-        var cagatayFirstTestProgress = new StudentTestProgress(TestProgressState.SUBMITTED, cagatay, firstTest);
-        var cagataySecondTestProgress = new StudentTestProgress(TestProgressState.STARTED, cagatay, secondTest);
-        studentTestProgressRepository.saveAll(List.of(cagatayFirstTestProgress, cagataySecondTestProgress));
+        var cagatayFirstTestProgress = new StudentTest(TestProgressState.SUBMITTED, cagatay, firstTest);
+        var cagataySecondTestProgress = new StudentTest(TestProgressState.STARTED, cagatay, secondTest);
+        studentTestRepository.saveAll(List.of(cagatayFirstTestProgress, cagataySecondTestProgress));
 
         // ali starts first tests answers one question and leaves
         studentAnswerRepository.saveAll(List.of(
@@ -81,8 +81,8 @@ public class DataProvider implements CommandLineRunner {
                         .get()
                 ) // answers first question wrong (first test)
         ));
-        var aliFirstTestProgress = new StudentTestProgress(TestProgressState.STARTED, ali, firstTest);
-        studentTestProgressRepository.saveAll(List.of(aliFirstTestProgress));
+        var aliFirstTestProgress = new StudentTest(TestProgressState.STARTED, ali, firstTest);
+        studentTestRepository.saveAll(List.of(aliFirstTestProgress));
     }
 
     private Test createFirstTest() {
@@ -103,7 +103,7 @@ public class DataProvider implements CommandLineRunner {
         var questionTwo = createQuestion("What is 2 + 2?", 2, questionTwoOptions);
 
         var testQuestions = List.of(questionOne, questionTwo);
-        return createTest("first demo test", testQuestions);
+        return createTest("first demo test", TestState.READY, testQuestions);
     }
 
     private Test createSecondTest() {
@@ -124,11 +124,11 @@ public class DataProvider implements CommandLineRunner {
         var questionTwo = createQuestion("In which year was the Republic of Turkey founded?", 2, questionTwoOptions);
 
         var testQuestions = List.of(questionOne, questionTwo);
-        return createTest("second demo test", testQuestions);
+        return createTest("second demo test", TestState.READY, testQuestions);
     }
 
-    private Test createTest(String name, List<Question> questions) {
-        var test = new Test(name, new ArrayList<>());
+    private Test createTest(String name, TestState state, List<Question> questions) {
+        var test = new Test(name, state, new ArrayList<>());
         questions.forEach(test::addQuestion);
         return test;
     }

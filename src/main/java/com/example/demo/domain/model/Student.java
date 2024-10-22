@@ -1,13 +1,12 @@
-package com.example.demo.domain;
+package com.example.demo.domain.model;
 
-import com.example.demo.domain.base.BaseEntity;
+import com.example.demo.domain.model.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

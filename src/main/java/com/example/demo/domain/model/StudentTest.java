@@ -1,6 +1,6 @@
-package com.example.demo.domain;
+package com.example.demo.domain.model;
 
-import com.example.demo.domain.base.BaseEntity;
+import com.example.demo.domain.model.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +21,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-@Table(name = "student_test_progress")
-public class StudentTestProgress extends BaseEntity {
+@Table(name = "student_test")
+public class StudentTest extends BaseEntity {
 
     @NotNull
     @Column(name = "state")
