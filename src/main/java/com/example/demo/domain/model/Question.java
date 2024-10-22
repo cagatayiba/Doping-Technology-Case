@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -43,17 +44,18 @@ public class Question extends BaseEntity {
     private Test test;
 
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
-    private List<AnswerOption> answerOptions;
+    private List<AnswerOption> answerOptions = new ArrayList<>();
 
     public void addAnswerOption(AnswerOption answerOption) {
         getAnswerOptions().add(answerOption);
         answerOption.setQuestion(this);
     }
 
-    public void removeAnswerOption(AnswerOption answerOption) {
-        getAnswerOptions().remove(answerOption);
-        answerOption.setQuestion(null);
+    public Question addAnswerOptions(List<AnswerOption> answerOptions) {
+        answerOptions.forEach(this::addAnswerOption);
+        return this;
     }
+
 
     public void sortAnswerOptions() {
         getAnswerOptions().sort(Comparator.comparing(AnswerOption::getLabel));

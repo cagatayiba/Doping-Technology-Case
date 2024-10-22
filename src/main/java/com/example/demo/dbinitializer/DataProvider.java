@@ -56,7 +56,7 @@ public class DataProvider implements CommandLineRunner {
                             .findAny()
                             .get(),
                         firstTestFirstQuestion
-                ), // answers first question wrong (first test)
+                ), // answerOptions first question wrong (first test)
                 new StudentAnswer(
                         cagatay,
                         firstTestSecondQuestion
@@ -65,7 +65,7 @@ public class DataProvider implements CommandLineRunner {
                             .findAny()
                             .get(),
                         firstTestSecondQuestion
-                ), // answers second question correct (first test)
+                ), // answerOptions second question correct (first test)
                 new StudentAnswer(
                         cagatay,
                         secondTestFirstQuestion
@@ -74,13 +74,13 @@ public class DataProvider implements CommandLineRunner {
                             .findAny()
                             .get(),
                         secondTestFirstQuestion
-                ) // answers first question correct (second test)
+                ) // answerOptions first question correct (second test)
         ));
         var cagatayFirstTestProgress = new StudentTest(TestProgressState.SUBMITTED, cagatay, firstTest);
         var cagataySecondTestProgress = new StudentTest(TestProgressState.STARTED, cagatay, secondTest);
         studentTestRepository.saveAll(List.of(cagatayFirstTestProgress, cagataySecondTestProgress));
 
-        // ali starts first tests answers one question and leaves
+        // ali starts first tests answerOptions one question and leaves
         studentAnswerRepository.saveAll(List.of(
                 new StudentAnswer(
                         ali,
@@ -90,7 +90,7 @@ public class DataProvider implements CommandLineRunner {
                             .findAny()
                             .get(),
                         firstTestFirstQuestion
-                ) // answers first question wrong (first test)
+                ) // answerOptions first question wrong (first test)
         ));
         var aliFirstTestProgress = new StudentTest(TestProgressState.STARTED, ali, firstTest);
         studentTestRepository.saveAll(List.of(aliFirstTestProgress));

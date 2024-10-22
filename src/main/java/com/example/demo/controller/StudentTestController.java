@@ -7,6 +7,7 @@ import com.example.demo.domain.response.StartTestResponse;
 import com.example.demo.domain.response.TestResultDetailResponse;
 import com.example.demo.service.StudentAnswerService;
 import com.example.demo.service.StudentTestManagementService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class StudentTestController {
     }
 
     @PostMapping("/{studentId}/{testId}/answer-question")
-    public ResponseEntity<Object> answerQuestion(@PathVariable UUID studentId, @PathVariable UUID testId, @RequestBody AnswerQuestionRequest answerQuestionRequest) {
+    public ResponseEntity<Object> answerQuestion(@PathVariable UUID studentId, @PathVariable UUID testId, @RequestBody @Valid AnswerQuestionRequest answerQuestionRequest) {
         studentAnswerService.answerQuestion(studentId, testId, answerQuestionRequest);
         return ResponseEntity.ok().build();
     }

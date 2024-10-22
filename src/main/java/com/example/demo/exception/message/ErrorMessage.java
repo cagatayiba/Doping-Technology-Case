@@ -16,6 +16,13 @@ public enum ErrorMessage implements BaseErrorMessage {
     // continue test
     INVALID_TEST_PROGRESS_STATE_TO_CONTINUE("Bir teste devam edebilmek için başlamış olmanız gerekmektedir."),
 
+    // add question
+    INVALID_TEST_STATE_TO_ADD_QUESTION("Bir teste yalnızca draft durumundayken soru eklenebilir."),
+    OPTIONS_MUST_HAVE_ONE_CORRECT_ANSWER("Bir soru için yalnızca bir adet doğru cevap belirlenmelidir."),
+
+    // illegal argument
+    QUESTION_CANNOT_BE_NULL_TO_ADD_TEST("Teste eklenmek istenen soru null olamaz."),
+
     // generic
     ITEM_NOT_FOUND("Aradığınızı bulamadık."),
     UNSPECIFIED_ERROR_MESSAGE("Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin.");

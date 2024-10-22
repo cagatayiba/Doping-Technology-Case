@@ -1,6 +1,8 @@
 package com.example.demo.domain.model;
 
 import com.example.demo.domain.model.base.BaseEntity;
+import com.example.demo.exception.IllegalArgumentException;
+import com.example.demo.exception.InternalServerException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,8 +16,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.example.demo.exception.message.ErrorMessage.QUESTION_CANNOT_BE_NULL_TO_ADD_TEST;
 
 @Getter
 @Setter
@@ -35,16 +40,16 @@ public class Test extends BaseEntity {
     private TestState state;
 
     @OneToMany(mappedBy = "test", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
-    List<Question> questions;
+    List<Question> questions = new ArrayList<>();
 
     public void addQuestion(Question question) {
+        if (questions == null) throw new IllegalArgumentException(QUESTION_CANNOT_BE_NULL_TO_ADD_TEST);
+        if(question.getNumber() == null){
+            var currentQuestionCount = getQuestions().size();
+            question.setNumber(currentQuestionCount+1);
+        }
         getQuestions().add(question);
         question.setTest(this);
-    }
-
-    public void removeQuestion(Question question) {
-        getQuestions().remove(question);
-        question.setTest(null);
     }
 
     public void sortQuestionsByNumber(){
