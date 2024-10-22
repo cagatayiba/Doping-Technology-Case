@@ -27,4 +27,8 @@ public class StudentAnswer extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_student_answer_answer_option"))
     private AnswerOption answerOption;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_student_answer_question"))
+    private Question question;
 }

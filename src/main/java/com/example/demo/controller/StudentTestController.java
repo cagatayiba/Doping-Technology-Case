@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.response.QuestionResponse;
 import com.example.demo.domain.response.StartTestResponse;
 import com.example.demo.service.StudentTestManagementService;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,10 @@ public class StudentTestController {
     @PostMapping("/{studentId}/{testId}/start")
     public ResponseEntity<StartTestResponse> startTest(@PathVariable UUID studentId, @PathVariable UUID testId) {
         return ResponseEntity.ok(studentTestManagementService.startTest(studentId, testId));
+    }
+
+    @GetMapping("/{studentId}/{testId}/get-question/{questionNumber}")
+    public ResponseEntity<QuestionResponse> getQuestion(@PathVariable UUID studentId, @PathVariable UUID testId, @PathVariable int questionNumber) {
+        return ResponseEntity.ok(studentTestManagementService.getQuestion(studentId, testId, questionNumber));
     }
 }

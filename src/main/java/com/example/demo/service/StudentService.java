@@ -15,7 +15,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public Student getStudentReferenceById(UUID id) {
+    public Student getReferenceById(UUID id) {
         return studentRepository.getReferenceById(id);
     }
 

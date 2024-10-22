@@ -16,6 +16,10 @@ public class TestService {
 
     private final TestRepository testRepository;
 
+    public Test getReferenceById(UUID id) {
+        return testRepository.getReferenceById(id);
+    }
+
     public Test getById(UUID testId){
         return testRepository.findById(testId)
                 .orElseThrow(() -> new NotFoundException(InternalErrorMessage.ITEM_NOT_FOUND));

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -51,5 +52,9 @@ public class Question extends BaseEntity {
     public void removeAnswerOption(AnswerOption answerOption) {
         getAnswerOptions().remove(answerOption);
         answerOption.setQuestion(null);
+    }
+
+    public void sortAnswerOptions() {
+        getAnswerOptions().sort(Comparator.comparing(AnswerOption::getLabel));
     }
 }

@@ -43,28 +43,37 @@ public class DataProvider implements CommandLineRunner {
 
         // cagatay solved first test and started second currently not submitted
         var firstTestQuestions = firstTest.getQuestions();
+        var firstTestFirstQuestion = firstTestQuestions.getFirst();
+        var firstTestSecondQuestion = firstTestQuestions.get(1);
         var secondTestQuestions = secondTest.getQuestions();
+        var secondTestFirstQuestion = secondTestQuestions.getFirst();
         studentAnswerRepository.saveAll(List.of(
-                new StudentAnswer(cagatay, firstTestQuestions
-                        .getFirst()
-                        .getAnswerOptions().stream()
-                        .filter(answerOption -> !answerOption.getIsCorrectOption())
-                        .findAny()
-                        .get()
+                new StudentAnswer(
+                        cagatay,
+                        firstTestFirstQuestion
+                            .getAnswerOptions().stream()
+                            .filter(answerOption -> !answerOption.getIsCorrectOption())
+                            .findAny()
+                            .get(),
+                        firstTestFirstQuestion
                 ), // answers first question wrong (first test)
-                new StudentAnswer(cagatay, firstTestQuestions
-                        .get(1)
-                        .getAnswerOptions().stream()
-                        .filter(AnswerOption::getIsCorrectOption)
-                        .findAny()
-                        .get()
+                new StudentAnswer(
+                        cagatay,
+                        firstTestSecondQuestion
+                            .getAnswerOptions().stream()
+                            .filter(AnswerOption::getIsCorrectOption)
+                            .findAny()
+                            .get(),
+                        firstTestSecondQuestion
                 ), // answers second question correct (first test)
-                new StudentAnswer(cagatay, secondTestQuestions
-                        .getFirst()
-                        .getAnswerOptions().stream()
-                        .filter(AnswerOption::getIsCorrectOption)
-                        .findAny()
-                        .get()
+                new StudentAnswer(
+                        cagatay,
+                        secondTestFirstQuestion
+                            .getAnswerOptions().stream()
+                            .filter(AnswerOption::getIsCorrectOption)
+                            .findAny()
+                            .get(),
+                        secondTestFirstQuestion
                 ) // answers first question correct (second test)
         ));
         var cagatayFirstTestProgress = new StudentTest(TestProgressState.SUBMITTED, cagatay, firstTest);
@@ -73,12 +82,14 @@ public class DataProvider implements CommandLineRunner {
 
         // ali starts first tests answers one question and leaves
         studentAnswerRepository.saveAll(List.of(
-                new StudentAnswer(ali, firstTestQuestions
-                        .stream().filter(q -> q.getNumber().equals(1)).findAny().get()
-                        .getAnswerOptions().stream()
-                        .filter(AnswerOption::getIsCorrectOption)
-                        .findAny()
-                        .get()
+                new StudentAnswer(
+                        ali,
+                        firstTestFirstQuestion
+                            .getAnswerOptions().stream()
+                            .filter(AnswerOption::getIsCorrectOption)
+                            .findAny()
+                            .get(),
+                        firstTestFirstQuestion
                 ) // answers first question wrong (first test)
         ));
         var aliFirstTestProgress = new StudentTest(TestProgressState.STARTED, ali, firstTest);
