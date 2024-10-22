@@ -1,23 +1,17 @@
 spring:
   application.name: doping-technology-case
 
-  ####
   # h2 db
-  #h2:
-    #console.enabled: true
-
-  # datasource
-  #datasource.url: jdbc:h2:mem:test
-
+  h2:
+    console.enabled: true
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/doping-case?user=postgres&password=postgres
-
+   url: jdbc:h2:mem:test
 
   # jpa
   jpa:
     generate-ddl: true
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create
 
     show-sql: true
     properties:
