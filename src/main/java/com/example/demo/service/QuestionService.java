@@ -2,9 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.domain.model.Question;
 import com.example.demo.domain.model.Test;
-import com.example.demo.domain.response.QuestionResponse;
 import com.example.demo.exception.NotFoundException;
-import com.example.demo.exception.message.InternalErrorMessage;
+import com.example.demo.exception.message.ErrorMessage;
 import com.example.demo.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class QuestionService {
 
     public Question getByTestAndNumber(Test test, int questionNumber) {
         return findByTestAndNumber(test, questionNumber)
-                .orElseThrow(() -> new NotFoundException(InternalErrorMessage.TEST_QUESTION_NOT_FOUND_WITH_NUMBER));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.ITEM_NOT_FOUND));
     }
 
     public Optional<Question> findByTestAndNumber(Test test, int questionNumber) {

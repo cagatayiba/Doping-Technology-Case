@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.model.Student;
 import com.example.demo.exception.NotFoundException;
-import com.example.demo.exception.message.InternalErrorMessage;
+import com.example.demo.exception.message.ErrorMessage;
 import com.example.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,6 @@ public class StudentService {
 
     public Student getById(UUID id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(InternalErrorMessage.ITEM_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.ITEM_NOT_FOUND));
     }
 }

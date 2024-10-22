@@ -3,7 +3,7 @@ package com.example.demo.validation;
 import com.example.demo.domain.model.Student;
 import com.example.demo.domain.model.Test;
 import com.example.demo.domain.model.TestState;
-import com.example.demo.exception.message.ClientErrorMessage;
+import com.example.demo.exception.message.ErrorMessage;
 import com.example.demo.repository.StudentTestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,10 +20,10 @@ public class StartTestValidator extends AbstractValidator {
     }
 
     private void validateTestState(Test test) {
-        check(test.getState() == TestState.READY, ClientErrorMessage.CANNOT_START_TEST_NOT_READY);
+        check(test.getState() == TestState.READY, ErrorMessage.CANNOT_START_TEST_NOT_READY);
     }
 
     private void validateNotStartedBefore(Student student, Test test){
-        check(!studentTestRepository.existsByStudentAndTest(student, test), ClientErrorMessage.CANNOT_START_TEST_ALREADY_HAS_RECORD);
+        check(!studentTestRepository.existsByStudentAndTest(student, test), ErrorMessage.CANNOT_START_TEST_ALREADY_HAS_RECORD);
     }
 }

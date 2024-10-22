@@ -1,18 +1,29 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.model.Question;
 import com.example.demo.domain.model.Student;
+import com.example.demo.domain.model.StudentAnswer;
 import com.example.demo.domain.model.StudentTest;
 import com.example.demo.domain.model.Test;
 import com.example.demo.domain.model.TestProgressState;
+import com.example.demo.domain.response.ContinueTestResponse;
+import com.example.demo.domain.response.QuestionProgressResponse;
+import com.example.demo.domain.response.QuestionProgressState;
 import com.example.demo.domain.response.QuestionResponse;
 import com.example.demo.domain.response.StartTestResponse;
+import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.message.ErrorMessage;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.repository.StudentTestRepository;
+import com.example.demo.validation.ContinueTestValidator;
 import com.example.demo.validation.StartTestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +37,7 @@ public class StudentTestManagementService {
     private final TestService testService;
     private final QuestionService questionService;
     private final StudentAnswerService studentAnswerService;
+    private final ContinueTestValidator continueTestValidator;
 
     public StartTestResponse startTest(UUID studentId, UUID testId) {
         var testToStart = testService.getById(testId);
@@ -54,6 +66,39 @@ public class StudentTestManagementService {
                 .orElse(null);
 
         return questionMapper.toQuestionResponse(question, chosenOptionId);
+    }
+
+    public ContinueTestResponse continueTest(UUID studentId, UUID testId) {
+        var student = studentService.getReferenceById(studentId);
+        var test = testService.getById(testId);
+        var studentTest = getByStudentAndTest(student, test);
+        continueTestValidator.validate(studentTest);
+
+        var testQuestions = test.getQuestions();
+        var studentAnswers = studentAnswerService.findByStudentAndQuestions(student, testQuestions);
+        var studentAnswersByQuestion = studentAnswers.stream()
+                .collect(Collectors.toMap(StudentAnswer::getQuestion, entity -> entity));
+
+        testQuestions.sort(Comparator.comparing(Question::getNumber));
+        var testProgress = testQuestions.stream()
+                .map(question ->
+                        QuestionProgressResponse.builder()
+                                .questionNumber(question.getNumber())
+                                .questionState(studentAnswersByQuestion.containsKey(question) ? QuestionProgressState.ANSWERED : QuestionProgressState.UNANSWERED)
+                                .build()
+                ).toList();
+        var firstQuestion = testQuestions.getFirst();
+        var firstQuestionAnswer = Optional.ofNullable(studentAnswersByQuestion.get(firstQuestion));
+        return ContinueTestResponse.builder()
+                .testName(test.getName())
+                .testProgress(testProgress)
+                .firstQuestion(questionMapper.toQuestionResponse(firstQuestion, firstQuestionAnswer.map(StudentAnswer::getId).orElse(null)))
+                .build();
+    }
+
+    private StudentTest getByStudentAndTest(Student student, Test test) {
+        return studentTestRepository.findByStudentAndTest(student, test)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.ITEM_NOT_FOUND));
     }
 
     private StudentTest create(TestProgressState state, Student student, Test test) {

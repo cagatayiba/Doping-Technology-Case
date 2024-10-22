@@ -4,15 +4,15 @@ import com.example.demo.domain.model.Question;
 import com.example.demo.domain.model.Student;
 import com.example.demo.domain.model.StudentAnswer;
 import com.example.demo.domain.request.AnswerQuestionRequest;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.message.ClientErrorMessage;
 import com.example.demo.repository.StudentAnswerRepository;
 import com.example.demo.validation.AnswerQuestionValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -49,5 +49,9 @@ public class StudentAnswerService {
 
     public Optional<StudentAnswer> findByStudentAndQuestion(Student student, Question question) {
         return studentAnswerRepository.findByStudentAndQuestion(student, question);
+    }
+
+    public List<StudentAnswer> findByStudentAndQuestions(Student student, List<Question> questions) {
+        return studentAnswerRepository.findByStudentAndQuestionIn(student, questions);
     }
 }

@@ -3,7 +3,7 @@ package com.example.demo.exception.advicer;
 import com.example.demo.domain.response.error.ErrorResponse;
 import com.example.demo.exception.InternalServerException;
 import com.example.demo.exception.base.BaseException;
-import com.example.demo.exception.message.ClientErrorMessage;
+import com.example.demo.exception.message.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -22,7 +22,7 @@ public class GlobalExceptionController {
 
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionController.class);
 
-    private final BaseException genericClientException = new InternalServerException(ClientErrorMessage.UNSPECIFIED_ERROR_MESSAGE);
+    private final BaseException genericClientException = new InternalServerException(ErrorMessage.UNSPECIFIED_ERROR_MESSAGE);
 
 
     @ExceptionHandler({Exception.class})
@@ -32,10 +32,7 @@ public class GlobalExceptionController {
 
     @ExceptionHandler({BaseException.class})
     public ResponseEntity<ErrorResponse> handleCustomException(BaseException ex, WebRequest request) {
-        if(ex.getBaseErrorMessage().isClientMessage()){
-            return getErrorResponse(ex, request);
-        }
-        return getGenericErrorResponse(ex, request);
+        return getErrorResponse(ex, request);
     }
 
     private ResponseEntity<ErrorResponse> getGenericErrorResponse(Exception ex, WebRequest request) {

@@ -19,6 +19,7 @@ import lombok.ToString;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -56,5 +57,15 @@ public class Question extends BaseEntity {
 
     public void sortAnswerOptions() {
         getAnswerOptions().sort(Comparator.comparing(AnswerOption::getLabel));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

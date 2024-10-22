@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.request.AnswerQuestionRequest;
+import com.example.demo.domain.response.ContinueTestResponse;
 import com.example.demo.domain.response.QuestionResponse;
 import com.example.demo.domain.response.StartTestResponse;
 import com.example.demo.service.StudentAnswerService;
@@ -39,5 +40,10 @@ public class StudentTestController {
     public ResponseEntity<Object> answerQuestion(@PathVariable UUID studentId, @PathVariable UUID testId, @RequestBody AnswerQuestionRequest answerQuestionRequest) {
         studentAnswerService.answerQuestion(studentId, testId, answerQuestionRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{studentId}/{testId}/continue")
+    public ResponseEntity<ContinueTestResponse> continueTest(@PathVariable UUID studentId, @PathVariable UUID testId) {
+        return ResponseEntity.ok(studentTestManagementService.continueTest(studentId, testId));
     }
 }
