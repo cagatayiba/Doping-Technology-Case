@@ -33,8 +33,8 @@ public class DataProvider implements CommandLineRunner {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Transactional
     public void run(String... args) {
-        var firstTest = createFirstTest();
-        var secondTest = createSecondTest();
+        var firstTest = createGeneralCultureTest();
+        var secondTest = createMathTest();
         testRepository.saveAll(List.of(firstTest, secondTest));
 
         var cagatay = new Student(260201077L, "cagatay", "iba", "cagatay.iba@gmail.com");
@@ -96,7 +96,7 @@ public class DataProvider implements CommandLineRunner {
         studentTestRepository.saveAll(List.of(aliFirstTestProgress));
     }
 
-    private Test createFirstTest() {
+    private Test createGeneralCultureTest() {
         var questionOneOptions = List.of(
                 createAnswerOption('A', "Istanbul", false),
                 createAnswerOption('B', "Ankara", true),
@@ -104,27 +104,6 @@ public class DataProvider implements CommandLineRunner {
                 createAnswerOption('D', "Konya", false)
         );
         var questionOne = createQuestion("What is the capital of Turkey?", 1, questionOneOptions);
-
-        var questionTwoOptions = List.of(
-                createAnswerOption('A', "4", true),
-                createAnswerOption('B', "5", false),
-                createAnswerOption('C', "6", false),
-                createAnswerOption('D', "7", false)
-        );
-        var questionTwo = createQuestion("What is 2 + 2?", 2, questionTwoOptions);
-
-        var testQuestions = List.of(questionOne, questionTwo);
-        return createTest("first demo test", TestState.READY, testQuestions);
-    }
-
-    private Test createSecondTest() {
-        var questionOneOptions = List.of(
-                createAnswerOption('A', "3", false),
-                createAnswerOption('B', "4", false),
-                createAnswerOption('C', "2", true),
-                createAnswerOption('D', "1", false)
-        );
-        var questionOne = createQuestion("What is the square root of 4?", 1, questionOneOptions);
 
         var questionTwoOptions = List.of(
                 createAnswerOption('A', "1922", false),
@@ -135,7 +114,28 @@ public class DataProvider implements CommandLineRunner {
         var questionTwo = createQuestion("In which year was the Republic of Turkey founded?", 2, questionTwoOptions);
 
         var testQuestions = List.of(questionOne, questionTwo);
-        return createTest("second demo test", TestState.READY, testQuestions);
+        return createTest("general culture", TestState.READY, testQuestions);
+    }
+
+    private Test createMathTest() {
+        var questionOneOptions = List.of(
+                createAnswerOption('A', "3", false),
+                createAnswerOption('B', "4", false),
+                createAnswerOption('C', "2", true),
+                createAnswerOption('D', "1", false)
+        );
+        var questionOne = createQuestion("What is the square root of 4?", 1, questionOneOptions);
+
+        var questionTwoOptions = List.of(
+                createAnswerOption('A', "4", true),
+                createAnswerOption('B', "5", false),
+                createAnswerOption('C', "6", false),
+                createAnswerOption('D', "7", false)
+        );
+        var questionTwo = createQuestion("What is 2 + 2?", 2, questionTwoOptions);
+
+        var testQuestions = List.of(questionOne, questionTwo);
+        return createTest("math", TestState.READY, testQuestions);
     }
 
     private Test createTest(String name, TestState state, List<Question> questions) {

@@ -18,6 +18,10 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
+    public Question getReferenceById(UUID questionId) {
+        return questionRepository.getReferenceById(questionId);
+    }
+
     public Question getByTestAndNumber(Test test, int questionNumber) {
         return findByTestAndNumber(test, questionNumber)
                 .orElseThrow(() -> new NotFoundException(InternalErrorMessage.TEST_QUESTION_NOT_FOUND_WITH_NUMBER));
@@ -25,5 +29,9 @@ public class QuestionService {
 
     public Optional<Question> findByTestAndNumber(Test test, int questionNumber) {
         return questionRepository.findByTestAndNumber(test, questionNumber);
+    }
+
+    public int getNumberOfQuestionInTest(Test test) {
+        return questionRepository.countByTest(test);
     }
 }

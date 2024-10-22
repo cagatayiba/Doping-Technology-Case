@@ -4,7 +4,6 @@ import com.example.demo.domain.model.Student;
 import com.example.demo.domain.model.StudentTest;
 import com.example.demo.domain.model.Test;
 import com.example.demo.domain.model.TestProgressState;
-import com.example.demo.domain.model.base.BaseEntity;
 import com.example.demo.domain.response.QuestionResponse;
 import com.example.demo.domain.response.StartTestResponse;
 import com.example.demo.mapper.QuestionMapper;
@@ -35,10 +34,12 @@ public class StudentTestManagementService {
 
         create(TestProgressState.STARTED, student, testToStart);
 
+        var numberOfQuestions = questionService.getNumberOfQuestionInTest(testToStart);
         var firstQuestion = questionService.getByTestAndNumber(testToStart, 1);
         firstQuestion.sortAnswerOptions();
         return StartTestResponse.builder()
                 .testName(testToStart.getName())
+                .numberOfQuestions(numberOfQuestions)
                 .firstQuestion(questionMapper.toQuestionResponse(firstQuestion, null))
                 .build();
     }

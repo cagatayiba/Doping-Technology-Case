@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface QuestionRepository extends JpaRepository<Question, UUID> {
 
     Optional<Question> findByTestAndNumber(Test test, int number);
+
+    int countByTest(Test test);
 }
