@@ -44,7 +44,7 @@ public class StudentTestManagementService {
         var student = studentService.getReferenceById(studentId);
         startTestValidator.validate(student, testToStart);
 
-        create(TestProgressState.STARTED, student, testToStart);
+        create(student, testToStart);
 
         var numberOfQuestions = questionService.getNumberOfQuestionInTest(testToStart);
         var firstQuestion = questionService.getByTestAndNumber(testToStart, 1);
@@ -113,13 +113,13 @@ public class StudentTestManagementService {
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.ITEM_NOT_FOUND));
     }
 
-    private StudentTest create(TestProgressState state, Student student, Test test) {
+    private void create(Student student, Test test) {
         var studentTest = StudentTest.builder()
-                .state(state)
+                .state(TestProgressState.STARTED)
                 .student(student)
                 .test(test)
                 .build();
 
-        return studentTestRepository.save(studentTest);
+        studentTestRepository.save(studentTest);
     }
 }
