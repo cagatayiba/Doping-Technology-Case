@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "student_test_result")
-public class StudentTestResult extends BaseEntity {
+public class TestResult extends BaseEntity {
 
     @NotNull
     @Column(name = "number_of_correct_answers")

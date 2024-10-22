@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.model.Question;
 import com.example.demo.domain.model.Student;
 import com.example.demo.domain.model.StudentAnswer;
 import com.example.demo.domain.model.StudentTest;
@@ -10,8 +9,6 @@ import com.example.demo.domain.response.ContinueTestResponse;
 import com.example.demo.domain.response.QuestionProgressResponse;
 import com.example.demo.domain.response.QuestionProgressState;
 import com.example.demo.domain.response.QuestionResponse;
-import com.example.demo.domain.response.QuestionResult;
-import com.example.demo.domain.response.QuestionResultResponse;
 import com.example.demo.domain.response.StartTestResponse;
 import com.example.demo.domain.response.TestResultDetailResponse;
 import com.example.demo.exception.NotFoundException;
@@ -23,7 +20,6 @@ import com.example.demo.validation.StartTestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,7 +37,7 @@ public class StudentTestManagementService {
     private final QuestionService questionService;
     private final StudentAnswerService studentAnswerService;
     private final ContinueTestValidator continueTestValidator;
-    private final StudentTestResultService studentTestResultService;
+    private final TestResultService testResultService;
 
     public StartTestResponse startTest(UUID studentId, UUID testId) {
         var testToStart = testService.getById(testId);
@@ -100,15 +96,16 @@ public class StudentTestManagementService {
                 .build();
     }
 
+
     public TestResultDetailResponse submitTest(UUID studentId, UUID testId) {
         var student = studentService.getReferenceById(studentId);
         var test = testService.getById(testId);
+        var studentTest = getByStudentAndTest(student, test);
+        // TODO validation
+        studentTest.setState(TestProgressState.SUBMITTED);
+        studentTestRepository.save(studentTest);
 
-        test.sortQuestionsByNumber();
-        var testQuestions = test.getQuestions();
-        var studentAnswers = studentAnswerService.findByStudentAndQuestions(student, testQuestions);
-
-        return studentTestResultService.generateTestResult(test, testQuestions, studentAnswers);
+        return testResultService.generateTestResult(test, student);
     }
 
     private StudentTest getByStudentAndTest(Student student, Test test) {
