@@ -15,6 +15,7 @@ import com.example.demo.exception.message.ErrorMessage;
 import com.example.demo.mapper.TestResultMapper;
 import com.example.demo.repository.StudentTestResultRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -47,17 +48,15 @@ public class TestResultService {
                 .numberOfUnansweredQuestions((int) questionResults.stream().filter(questionResult -> questionResult.result() == QuestionResult.UNANSWERED).count())
                 .build();
 
-        save(testResultMapper.toEntity(testResult));
+        save(testResultMapper.toEntity(testResult, student, test));
 
         return new TestResultDetailResponse(testResult, questionResults);
     }
 
-    public TestResultResponse getTestResults(UUID studentId, Pageable pageable) {
+    public Page<TestResultDto> getTestResults(UUID studentId, Pageable pageable) {
         var student = studentService.getReferenceById(studentId);
-        var results = studentTestResultRepository.findByStudent(student, pageable).stream()
-                .map(testResultMapper::toTestResultDto)
-                .toList();
-        return new TestResultResponse(results);
+        return studentTestResultRepository.findByStudent(student, pageable)
+                .map(testResultMapper::toTestResultDto);
     }
 
     public TestResultDetailResponse getTestResultDetail(UUID studentId, UUID testId){

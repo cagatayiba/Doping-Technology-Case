@@ -6,6 +6,7 @@ import com.example.demo.exception.NotFoundException;
 import com.example.demo.exception.message.ErrorMessage;
 import com.example.demo.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class QuestionService {
         return questionRepository.getReferenceById(questionId);
     }
 
+    @Cacheable(value = "questions", key = "#test.id + '-' + #questionNumber")
     public Question getByTestAndNumber(Test test, int questionNumber) {
         return findByTestAndNumber(test, questionNumber)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.ITEM_NOT_FOUND));

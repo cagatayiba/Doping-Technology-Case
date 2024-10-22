@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Component
+//@Component
 public class DataProvider implements CommandLineRunner {
 
     private final TestRepository testRepository;
