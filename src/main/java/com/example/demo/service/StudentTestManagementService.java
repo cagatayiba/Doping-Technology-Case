@@ -10,7 +10,10 @@ import com.example.demo.domain.response.ContinueTestResponse;
 import com.example.demo.domain.response.QuestionProgressResponse;
 import com.example.demo.domain.response.QuestionProgressState;
 import com.example.demo.domain.response.QuestionResponse;
+import com.example.demo.domain.response.QuestionResult;
+import com.example.demo.domain.response.QuestionResultResponse;
 import com.example.demo.domain.response.StartTestResponse;
+import com.example.demo.domain.response.TestResultDetailResponse;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.exception.message.ErrorMessage;
 import com.example.demo.mapper.QuestionMapper;
@@ -38,6 +41,7 @@ public class StudentTestManagementService {
     private final QuestionService questionService;
     private final StudentAnswerService studentAnswerService;
     private final ContinueTestValidator continueTestValidator;
+    private final StudentTestResultService studentTestResultService;
 
     public StartTestResponse startTest(UUID studentId, UUID testId) {
         var testToStart = testService.getById(testId);
@@ -74,12 +78,12 @@ public class StudentTestManagementService {
         var studentTest = getByStudentAndTest(student, test);
         continueTestValidator.validate(studentTest);
 
+        test.sortQuestionsByNumber();
         var testQuestions = test.getQuestions();
         var studentAnswers = studentAnswerService.findByStudentAndQuestions(student, testQuestions);
         var studentAnswersByQuestion = studentAnswers.stream()
                 .collect(Collectors.toMap(StudentAnswer::getQuestion, entity -> entity));
 
-        testQuestions.sort(Comparator.comparing(Question::getNumber));
         var testProgress = testQuestions.stream()
                 .map(question ->
                         QuestionProgressResponse.builder()
@@ -94,6 +98,17 @@ public class StudentTestManagementService {
                 .testProgress(testProgress)
                 .firstQuestion(questionMapper.toQuestionResponse(firstQuestion, firstQuestionAnswer.map(StudentAnswer::getId).orElse(null)))
                 .build();
+    }
+
+    public TestResultDetailResponse submitTest(UUID studentId, UUID testId) {
+        var student = studentService.getReferenceById(studentId);
+        var test = testService.getById(testId);
+
+        test.sortQuestionsByNumber();
+        var testQuestions = test.getQuestions();
+        var studentAnswers = studentAnswerService.findByStudentAndQuestions(student, testQuestions);
+
+        return studentTestResultService.generateTestResult(test, testQuestions, studentAnswers);
     }
 
     private StudentTest getByStudentAndTest(Student student, Test test) {

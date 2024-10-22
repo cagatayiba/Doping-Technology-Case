@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -44,5 +45,9 @@ public class Test extends BaseEntity {
     public void removeQuestion(Question question) {
         getQuestions().remove(question);
         question.setTest(null);
+    }
+
+    public void sortQuestionsByNumber(){
+        getQuestions().sort(Comparator.comparing(Question::getNumber));
     }
 }

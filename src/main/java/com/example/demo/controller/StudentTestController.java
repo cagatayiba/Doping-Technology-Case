@@ -4,6 +4,7 @@ import com.example.demo.domain.request.AnswerQuestionRequest;
 import com.example.demo.domain.response.ContinueTestResponse;
 import com.example.demo.domain.response.QuestionResponse;
 import com.example.demo.domain.response.StartTestResponse;
+import com.example.demo.domain.response.TestResultDetailResponse;
 import com.example.demo.service.StudentAnswerService;
 import com.example.demo.service.StudentTestManagementService;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,10 @@ public class StudentTestController {
     @GetMapping("/{studentId}/{testId}/continue")
     public ResponseEntity<ContinueTestResponse> continueTest(@PathVariable UUID studentId, @PathVariable UUID testId) {
         return ResponseEntity.ok(studentTestManagementService.continueTest(studentId, testId));
+    }
+
+    @PutMapping("/{studentId}/{testId}/submit")
+    public ResponseEntity<TestResultDetailResponse> submitTest(@PathVariable UUID studentId, @PathVariable UUID testId) {
+        return ResponseEntity.ok(studentTestManagementService.submitTest(studentId, testId));
     }
 }
